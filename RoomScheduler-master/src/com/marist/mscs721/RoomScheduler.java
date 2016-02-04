@@ -36,6 +36,9 @@ import java.util.logging.Logger;
 public class RoomScheduler {
 	protected static Scanner keyboard = new Scanner(System.in);
 
+	/**
+	 * Entry point to the program
+	 */
 	public static void main(String[] args) {
 		ArrayList<Room> rooms = new ArrayList<Room>();
 
@@ -69,7 +72,10 @@ public class RoomScheduler {
 
 	}
 
-	// create a class to see the schedule of the rooms
+	/** 
+	 * Lists the schedule for a selected room
+	 * 
+	 */
 	protected static String listSchedule(ArrayList<Room> roomList) {
 		String roomName = getRoomName();
 		System.out.println(roomName + " Schedule");
@@ -82,7 +88,10 @@ public class RoomScheduler {
 		return "";
 	}
 	
-	// displaying the options in which the options are available
+	/** 
+	 * Displaying the menu options available for user selection
+	 * And take the users input
+	 */
 	protected static int mainMenu() {
 		System.out.println("Main Menu:");
 		System.out.println("  1 - Add a room");
@@ -97,8 +106,7 @@ public class RoomScheduler {
 		return keyboard.nextInt();
 	}
 	/**
-	 * the following code is to schedule a room accordingly
-	 * addroom class allows the user to add rooms 
+	 * Adds a room to the existing list of rooms
 	 * 
 	 */
 		protected static String addRoom(ArrayList<Room> roomList) {
@@ -107,6 +115,11 @@ public class RoomScheduler {
 
 		int capacity = getCapacity();
 
+		for(int loop = 0 ;loop < roomList.size(); loop++)
+		{
+			if(roomList.get(loop).getName() == name)
+				return "The selected room name "+ name +" already exists";
+		}
 		Room newRoom = new Room(name, capacity);
 		roomList.add(newRoom);
 
