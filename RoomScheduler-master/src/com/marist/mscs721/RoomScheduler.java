@@ -320,20 +320,27 @@ public class RoomScheduler {
 		if (roomList.isEmpty())
 			return "There are no rooms to be saved";
 
+		//Outer most Object containing an array of Rooms
 		JSONObject Rooms = new JSONObject();
+		//This is the array of Room Objects
 		JSONArray roomArr = new JSONArray();
 
 		for (int loop = 0; loop < roomList.size(); loop++) {
 			Room rm = roomList.get(loop);
+			// Contains the name, capacity, meetings of every room
+			//This is added to the Array of Rooms
 			JSONObject roomObj = new JSONObject();
 
-			roomObj.clear();
 			roomObj.put("name", rm.getName());
 			roomObj.put("capacity", rm.getCapacity());
 
+			//This is the array containing the meetings for every room.
 			JSONArray meetings = new JSONArray();
+			
+			//This contains details of one meeting : Start Time, Stop Time and Subject
 			JSONObject meetingObj = new JSONObject();
 
+			
 			ArrayList<Meeting> localMeetings = roomList.get(loop).getMeetings();
 
 			for (int innerloop = 0; innerloop < localMeetings.size(); innerloop++) {
@@ -354,7 +361,11 @@ public class RoomScheduler {
 		try {
 
 			File file = new File("E:\\test.json");
-			file.createNewFile();
+			
+			// Creating a JSON file at the specified location
+			file.createNewFile(); 
+			
+			//Writes the contents into the file
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(Rooms.toJSONString());
 			fileWriter.flush();
@@ -363,10 +374,7 @@ public class RoomScheduler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		System.out.print(Rooms);
-
-		return "";
+		return "Successfully exported into JSON";
 	}
 
 	/**
