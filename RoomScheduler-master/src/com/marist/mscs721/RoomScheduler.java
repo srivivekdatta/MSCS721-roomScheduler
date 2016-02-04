@@ -43,8 +43,8 @@ public class RoomScheduler {
 		ArrayList<Room> rooms = new ArrayList<Room>();
 
 		while (true) {
-			switch (mainMenu())     // this switch is used to make a 
-			{						//selection from the available options
+			switch (mainMenu()) // this switch is used to make a
+			{ // selection from the available options
 			case 1:
 				System.out.println(addRoom(rooms));
 				break;
@@ -72,7 +72,7 @@ public class RoomScheduler {
 
 	}
 
-	/** 
+	/**
 	 * Lists the schedule for a selected room
 	 * 
 	 */
@@ -87,10 +87,10 @@ public class RoomScheduler {
 
 		return "";
 	}
-	
-	/** 
-	 * Displaying the menu options available for user selection
-	 * And take the users input
+
+	/**
+	 * Displaying the menu options available for user selection And take the
+	 * users input
 	 */
 	protected static int mainMenu() {
 		System.out.println("Main Menu:");
@@ -105,32 +105,31 @@ public class RoomScheduler {
 
 		return keyboard.nextInt();
 	}
-	
+
 	/**
 	 * Adds a room to the existing list of rooms
 	 * 
 	 */
-		protected static String addRoom(ArrayList<Room> roomList) {
+	protected static String addRoom(ArrayList<Room> roomList) {
 		System.out.println("Add a room:");
 		String name = getRoomName();
 
 		int capacity = getCapacity();
 
-		for(int loop = 0 ;loop < roomList.size(); loop++)
-		{
-			if(roomList.get(loop).getName() == name)
-				return "The selected room name "+ name +" already exists";
+		for (int loop = 0; loop < roomList.size(); loop++) {
+			if (roomList.get(loop).getName() == name)
+				return "The selected room name " + name + " already exists";
 		}
 		Room newRoom = new Room(name, capacity);
 		roomList.add(newRoom);
 
 		return "Room '" + newRoom.getName() + "' added successfully!";
 	}
-		
-/**
- * Removes a room from the list of rooms 
- *
- */
+
+	/**
+	 * Removes a room from the list of rooms
+	 *
+	 */
 	protected static String removeRoom(ArrayList<Room> roomList) {
 		System.out.println("Remove a room:");
 		roomList.remove(findRoomIndex(roomList, getRoomName()));
@@ -141,8 +140,9 @@ public class RoomScheduler {
 	/**
 	 * Lists all the rooms added by the user
 	 * 
-	 * @param roomList : Contains the List of all the rooms added by the user
-	 * @return roomList.size()  : Displays the number of rooms in the list
+	 * @param roomList
+	 *            : Contains the List of all the rooms added by the user
+	 * @return roomList.size() : Displays the number of rooms in the list
 	 */
 	protected static String listRooms(ArrayList<Room> roomList) {
 		System.out.println("Room Name - Capacity");
@@ -162,7 +162,8 @@ public class RoomScheduler {
 	/**
 	 * Adds a schedule for a selected room
 	 * 
-	 * @param roomList : Contains the list of all the rooms added by the user
+	 * @param roomList
+	 *            : Contains the list of all the rooms added by the user
 	 * @return Success or error message to be displayed to the user.
 	 */
 	protected static String scheduleRoom(ArrayList<Room> roomList) {
@@ -202,8 +203,11 @@ public class RoomScheduler {
 	/**
 	 * Retrieve the room details based on the given name
 	 * 
-	 * @param roomList : Contains the list of all the rooms and their details
-	 * @param name : Contains the name of the room whose details are to be looked up.
+	 * @param roomList
+	 *            : Contains the list of all the rooms and their details
+	 * @param name
+	 *            : Contains the name of the room whose details are to be looked
+	 *            up.
 	 * @return : Contains the Room details retrieved for a given room name.
 	 */
 	protected static Room getRoomFromName(ArrayList<Room> roomList, String name) {
@@ -213,9 +217,11 @@ public class RoomScheduler {
 	/**
 	 * Finds the index of the room based on its name
 	 * 
-	 * @param roomList : Contains the list of rooms an their details
-	 * @param roomName : Contains the name of the room whose index is to be found.
-	 * @return  Index of the given room name.
+	 * @param roomList
+	 *            : Contains the list of rooms an their details
+	 * @param roomName
+	 *            : Contains the name of the room whose index is to be found.
+	 * @return Index of the given room name.
 	 */
 	protected static int findRoomIndex(ArrayList<Room> roomList, String roomName) {
 		int roomIndex = 0;
@@ -243,7 +249,7 @@ public class RoomScheduler {
 	/**
 	 * Fetches the capacity of the room from the user.
 	 * 
-	 * @return  Valid capacity entere by the user
+	 * @return Valid capacity entere by the user
 	 */
 	protected static int getCapacity() {
 
@@ -256,9 +262,8 @@ public class RoomScheduler {
 			// Check if the value entered is an integer or not.
 			if (capvalue.matches("[0-9]*"))
 				capacity = Integer.parseInt(capvalue);
-			else 
-			{// If entered value is not an integer
-				// display a message and get a valid input.
+			else {// If entered value is not an integer
+					// display a message and get a valid input.
 				System.out.println("Please enter a valid number for capacity..");
 				capacity = getCapacity();
 			}
@@ -270,6 +275,7 @@ public class RoomScheduler {
 
 	/**
 	 * Check for the validity of the entered date
+	 * 
 	 * @return : true or false based on the validity checks
 	 */
 	protected static boolean ValidateDate() {
@@ -305,8 +311,10 @@ public class RoomScheduler {
 	/**
 	 * Exports the rooms along with their details into a JSON file
 	 * 
-	 * @param roomList : List from which the rooms and their details are to be exported
-	 * @return  :Success or Error message to be displayed to the user.
+	 * @param roomList
+	 *            : List from which the rooms and their details are to be
+	 *            exported
+	 * @return :Success or Error message to be displayed to the user.
 	 */
 	protected static String exportIntoJson(ArrayList<Room> roomList) {
 		if (roomList.isEmpty())
@@ -360,12 +368,14 @@ public class RoomScheduler {
 
 		return "";
 	}
-/**
- * Imports rooms and their details from the JSON files
- * 
- * @param roomList : Adds the imported rooms an their details into this array
- * @return  : Success or error message to be displayed to the user
- */
+
+	/**
+	 * Imports rooms and their details from the JSON files
+	 * 
+	 * @param roomList
+	 *            : Adds the imported rooms an their details into this array
+	 * @return : Success or error message to be displayed to the user
+	 */
 	protected static String importFromJson(ArrayList<Room> roomList) {
 		String url = "E:\\test.json";
 		if (validURL(url)) {
