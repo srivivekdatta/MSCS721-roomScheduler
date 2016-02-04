@@ -163,7 +163,7 @@ public class RoomScheduler {
 		Timestamp endTimestamp = Timestamp.valueOf(endDate + " " + endTime);
 
 		System.out.println("Subject?");
-		String subject = keyboard.nextLine();
+		String subject = keyboard.next();
 
 		Room curRoom = getRoomFromName(roomList, name);
 
