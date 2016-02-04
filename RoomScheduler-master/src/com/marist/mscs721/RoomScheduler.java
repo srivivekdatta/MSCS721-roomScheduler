@@ -393,15 +393,20 @@ public class RoomScheduler {
 				BufferedReader br = new BufferedReader(new FileReader(url));
 				String currLine;
 
+				//Read the file till the end
 				while ((currLine = br.readLine()) != null) {
 
+					//Convert the read stream into object.
 					Object obj = parser.parse(currLine);
+					
+					//Check if the file is empty
 					if (obj.toString().isEmpty())
 						return "File is empty";
 
 					Room room;
 					Meeting meet;
 					JSONObject Rooms = (JSONObject) obj;
+					
 					JSONArray roomArr = (JSONArray) Rooms.get("rooms");
 
 					for (int loop = 0; loop < roomArr.size(); loop++) {
@@ -413,8 +418,7 @@ public class RoomScheduler {
 						room = new Room(name, (int) capacity);
 
 						JSONArray meetings = (JSONArray) roomObj.get("meetings");
-						// ArrayList<Meeting> roomSchedule = new
-						// ArrayList<Meeting>();
+						
 						for (int innerloop = 0; innerloop < meetings.size(); innerloop++) {
 							JSONObject scheduleObj = (JSONObject) meetings.get(innerloop);
 							meet = new Meeting(Timestamp.valueOf((String) scheduleObj.get("startTime")),
