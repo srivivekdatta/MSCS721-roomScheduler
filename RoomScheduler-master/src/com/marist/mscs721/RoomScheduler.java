@@ -23,7 +23,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.*;
-import java.util.logging.Logger;
+
+import java.util.logging.*;
 
 /**
  * 
@@ -35,6 +36,18 @@ import java.util.logging.Logger;
  */
 public class RoomScheduler {
 	protected static Scanner keyboard = new Scanner(System.in);
+	
+	private static String startDate;
+
+	private static String endDate;
+	
+	private static String startTime;
+
+	private static String endTime;
+
+	private enum StartOrEnd {
+		START, END
+	};
 
 	/**
 	 * Entry point to the program
@@ -65,6 +78,9 @@ public class RoomScheduler {
 				break;
 			case 7:
 				System.out.println(importFromJson(rooms));
+				break;
+			default:
+				System.out.println("Invalid selection.Please select from the above menu.");
 				break;
 			}
 
@@ -103,7 +119,21 @@ public class RoomScheduler {
 		System.out.println("  7 - Import From JSON");
 		System.out.println("Enter your selection: ");
 
-		return keyboard.nextInt();
+		String input = keyboard.next();
+		int selection = 0;
+		try {
+			// Check if the value entered is an integer or not.
+			if (input.matches("[1-7]"))
+				selection = Integer.parseInt(input);
+			else {// If entered value is not an integer
+					// display a message and get a valid input.
+				System.out.println("Please enter a valid number from the menu");
+				selection = mainMenu();
+			}
+		} catch (NumberFormatException nfex) {
+			System.out.println("exception is " + nfex.getMessage());
+		}
+		return selection;
 	}
 
 	/**
@@ -132,9 +162,13 @@ public class RoomScheduler {
 	 */
 	protected static String removeRoom(ArrayList<Room> roomList) {
 		System.out.println("Remove a room:");
-		roomList.remove(findRoomIndex(roomList, getRoomName()));
-
-		return "Room removed successfully!";
+		int roomindex = findRoomIndex(roomList, getRoomName());
+		if (roomindex != -1) {
+			roomList.remove(roomindex);
+			return "Room removed successfully!";
+		} else {
+			return "Entered room does not exist. Please enter a valid name";
+		}
 	}
 
 	/**
@@ -157,7 +191,7 @@ public class RoomScheduler {
 		return roomList.size() + " Room(s)";
 	}
 
-	static String startDate;
+	
 
 	/**
 	 * Adds a schedule for a selected room
@@ -170,20 +204,13 @@ public class RoomScheduler {
 		System.out.println("Schedule a room:");
 		String name = getRoomName();
 
-		System.out.println("Start Date? (yyyy-mm-dd):");
-		startDate = keyboard.next();
+		
+		getValidDate(StartOrEnd.START);
+		getValidTime(StartOrEnd.START);
+		
+		getValidDate(StartOrEnd.END);
+		getValidTime(StartOrEnd.END);
 
-		ValidateDate();
-
-		System.out.println("Start Time?");
-		String startTime = keyboard.next();
-		startTime = startTime + ":00.0";
-
-		System.out.println("End Date? (yyyy-mm-dd):");
-		String endDate = keyboard.next();
-		System.out.println("End Time?");
-		String endTime = keyboard.next();
-		endTime = endTime + ":00.0";
 
 		Timestamp startTimestamp = Timestamp.valueOf(startDate + " " + startTime);
 		Timestamp endTimestamp = Timestamp.valueOf(endDate + " " + endTime);
@@ -233,7 +260,10 @@ public class RoomScheduler {
 			roomIndex++;
 		}
 
-		return roomIndex;
+		if (roomIndex == roomList.size())
+			return -1;
+		else
+			return roomIndex;
 	}
 
 	/**
@@ -249,7 +279,7 @@ public class RoomScheduler {
 	/**
 	 * Fetches the capacity of the room from the user.
 	 * 
-	 * @return Valid capacity entere by the user
+	 * @return Valid capacity entered by the user
 	 */
 	protected static int getCapacity() {
 
@@ -276,13 +306,30 @@ public class RoomScheduler {
 	/**
 	 * Check for the validity of the entered date
 	 * 
+	 * @param pStartEnd
+	 * 
 	 * @return : true or false based on the validity checks
 	 */
-	protected static boolean ValidateDate() {
+	protected static boolean getValidDate(StartOrEnd pStartEnd) {
 		// Check for date format in yyyy-mm-dd
+		DateFormat df;
+		switch (pStartEnd) {
+		case START:
+			System.out.println("Start Date? (yyyy-mm-dd):");
+			startDate = keyboard.next();
+			df = new SimpleDateFormat(startDate);
+			break;
+		case END:
+			System.out.println("End Date? (yyyy-mm-dd):");
+			endDate = keyboard.next();
+			df = new SimpleDateFormat(startDate);
+			break;
+		default:
+			df = new SimpleDateFormat();
+			break;
+		}
 
-		DateFormat df = new SimpleDateFormat(startDate);
-		if (!startDate.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})")) {
+		if (!df.toString().matches("\\d{4}-\\d{2}-\\d{2}")) {
 			System.out.println("Please Enter valid date in the format yyyy-mm-dd");
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -290,21 +337,68 @@ public class RoomScheduler {
 			Date date = new Date();
 			System.out.println("Current date" + dateFormat.format(date));
 
-			getDate();
+			getDate(pStartEnd);
+
+		}
+		return true;
+	}
+	
+	protected static boolean getValidTime(StartOrEnd pStartEnd) {
+		// Check for date format in yyyy-mm-dd
+		DateFormat df;
+		switch (pStartEnd) {
+		case START:
+			System.out.println("Start Time?");
+			startTime = keyboard.next();
+			startTime = startTime + ":00.0";
+			df = new SimpleDateFormat(startTime);
+			break;
+		case END:
+			System.out.println("End Time?");
+			endTime = keyboard.next();
+			endTime = endTime + ":00.0";
+			df = new SimpleDateFormat(endTime);
+			break;
+		default:
+			df = new SimpleDateFormat();
+			break;
+		}
+
+		if (!df.toString().matches("([0-2][0-9]):([0-5][0-9]):([0-5][0-9])")) {
+			System.out.println("Please Enter valid time in the format hh:mm:ss");
+			DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+			
+			// get current date time with Date()
+			Date date = new Date();
+			System.out.println("Current time" + dateFormat.format(date));
+
+			getDate(pStartEnd);
 
 		}
 		return true;
 	}
 
 	/**
-	 * Fetche a date from the user
+	 * Fetches a date from the user
+	 * 
+	 * @param pStartEnd
 	 */
-	protected static void getDate() {
+	protected static void getDate(StartOrEnd pStartEnd) {
 		try {
-			startDate = keyboard.next();
-			ValidateDate();
+			switch (pStartEnd) {
+			case START:
+				startDate = keyboard.next();
+				break;
+			case END:
+				endDate = keyboard.next();
+				break;
+			default:
+				break;
+			}
+
+			getValidDate(pStartEnd);
 		} catch (Exception ex) {
-			System.out.println("Exceptio in getDate " + ex.getMessage());
+			System.out.println("Exception in getDate " + ex.getMessage());
 		}
 	}
 
@@ -320,27 +414,27 @@ public class RoomScheduler {
 		if (roomList.isEmpty())
 			return "There are no rooms to be saved";
 
-		//Outer most Object containing an array of Rooms
+		// Outer most Object containing an array of Rooms
 		JSONObject Rooms = new JSONObject();
-		//This is the array of Room Objects
+		// This is the array of Room Objects
 		JSONArray roomArr = new JSONArray();
 
 		for (int loop = 0; loop < roomList.size(); loop++) {
 			Room rm = roomList.get(loop);
 			// Contains the name, capacity, meetings of every room
-			//This is added to the Array of Rooms
+			// This is added to the Array of Rooms
 			JSONObject roomObj = new JSONObject();
 
 			roomObj.put("name", rm.getName());
 			roomObj.put("capacity", rm.getCapacity());
 
-			//This is the array containing the meetings for every room.
+			// This is the array containing the meetings for every room.
 			JSONArray meetings = new JSONArray();
-			
-			//This contains details of one meeting : Start Time, Stop Time and Subject
+
+			// This contains details of one meeting : Start Time, Stop Time and
+			// Subject
 			JSONObject meetingObj = new JSONObject();
 
-			
 			ArrayList<Meeting> localMeetings = roomList.get(loop).getMeetings();
 
 			for (int innerloop = 0; innerloop < localMeetings.size(); innerloop++) {
@@ -360,19 +454,19 @@ public class RoomScheduler {
 
 		try {
 
-			File file = new File("E:\\test.json");
-			
+			File file = new File("Please specify a path to save the file:");
+
 			// Creating a JSON file at the specified location
-			file.createNewFile(); 
-			
-			//Writes the contents into the file
+			file.createNewFile();
+
+			// Writes the contents into the file
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(Rooms.toJSONString());
 			fileWriter.flush();
 			fileWriter.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Error while exporting JSON");
 		}
 		return "Successfully exported into JSON";
 	}
@@ -381,7 +475,7 @@ public class RoomScheduler {
 	 * Imports rooms and their details from the JSON files
 	 * 
 	 * @param roomList
-	 *            : Adds the imported rooms an their details into this array
+	 *            : Adds the imported rooms and their details into this array
 	 * @return : Success or error message to be displayed to the user
 	 */
 	protected static String importFromJson(ArrayList<Room> roomList) {
@@ -393,32 +487,32 @@ public class RoomScheduler {
 				BufferedReader br = new BufferedReader(new FileReader(url));
 				String currLine;
 
-				//Read the file till the end
+				// Read the file till the end
 				while ((currLine = br.readLine()) != null) {
 
-					//Convert the read stream into object.
+					// Convert the read stream into object.
 					Object obj = parser.parse(currLine);
-					
-					//Check if the file is empty
+
+					// Check if the file is empty
 					if (obj.toString().isEmpty())
 						return "File is empty";
 
 					Room room;
 					Meeting meet;
 					JSONObject Rooms = (JSONObject) obj;
-					
+
 					JSONArray roomArr = (JSONArray) Rooms.get("rooms");
 
 					for (int loop = 0; loop < roomArr.size(); loop++) {
 
 						JSONObject roomObj = (JSONObject) roomArr.get(loop);
 						String name = (String) roomObj.get("name");
-						long capacity = (long) roomObj.get("capacity");
+						Integer capacity = (Integer) roomObj.get("capacity");
 
-						room = new Room(name, (int) capacity);
+						room = new Room(name, capacity);
 
 						JSONArray meetings = (JSONArray) roomObj.get("meetings");
-						
+
 						for (int innerloop = 0; innerloop < meetings.size(); innerloop++) {
 							JSONObject scheduleObj = (JSONObject) meetings.get(innerloop);
 							meet = new Meeting(Timestamp.valueOf((String) scheduleObj.get("startTime")),
@@ -431,7 +525,7 @@ public class RoomScheduler {
 				}
 				br.close();
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				System.out.println("Your export failed. File Couldnt be found");
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ParseException e) {
@@ -440,7 +534,7 @@ public class RoomScheduler {
 		} else
 			return importFromJson(roomList);
 
-		return "Successfully imported!";
+	return "Successfully imported!";
 	}
 
 	private static boolean validURL(String url) {
