@@ -18,10 +18,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
        </plugin>
         </plugins>
   </build>
-<!--   <scm>
+   <scm>
   	<url>https://github.com/srivivekdatta/MSCS721-roomScheduler.git</url>
   </scm>
-   --> 
+
   <issueManagement>
   	<url>https://github.com/srivivekdatta/MSCS721-roomScheduler/issues</url>
   </issueManagement>
@@ -34,6 +34,21 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   		<version>1.9.13</version>
   		<scope>test</scope>
   	</dependency>
+  <dependency>
+	<groupId>junit</groupId>
+	<artifactId>junit</artifactId>
+	<version>4.12</version>
+</dependency>
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+    <version>2.5</version>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.5</version>
+  </dependency>
   </dependencies>
   <dependencyManagement>
   	<dependencies>
