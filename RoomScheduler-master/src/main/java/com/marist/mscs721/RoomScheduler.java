@@ -1,4 +1,4 @@
-package com.marist.mscs721;
+package main.java.com.marist.mscs721;
 
 /**
  * @author Sri vivek CWID: 20062452
@@ -190,7 +190,8 @@ public class RoomScheduler {
    */
   protected static void removeRoom(ArrayList<Room> roomList) {
     System.out.println("Remove a room:");
-    int roomindex = findRoomIndex(roomList, getRoomName());
+   
+	   int roomindex = findRoomIndex(roomList, getRoomName());
     if (roomindex != -1) {
       roomList.remove(roomindex);
       LOGGER.log(Level.INFO, "Room removed successfully!");
@@ -198,7 +199,6 @@ public class RoomScheduler {
       LOGGER.log(Level.WARNING, "Entered room does not exist. Please enter a valid name");
     }
   }
-
   /**
    * Lists all the rooms added by the user
    *

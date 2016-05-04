@@ -1,4 +1,4 @@
-package com.marist.mscs721;
+package main.java.com.marist.mscs721;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
