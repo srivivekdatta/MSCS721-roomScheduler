@@ -4,3 +4,4 @@ main\java\com\marist\mscs721\AllTests.class
 main\java\com\marist\mscs721\Meeting.class
 main\java\com\marist\mscs721\Room.class
 main\java\com\marist\mscs721\RoomScheduler$StartOrEnd.class
+main\java\com\marist\mscs721\RoomSchedulerTest.class
